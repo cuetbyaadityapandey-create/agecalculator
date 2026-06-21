@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AINEX Age Calculator</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:linear-gradient(135deg,#0f172a,#2563eb);padding:15px}
+.container{max-width:900px;margin:auto}
+.header{position:relative;background:rgba(255,255,255,.15);padding:20px;border-radius:25px;color:#fff}
+.brand{display:flex;align-items:center;gap:15px}
+.logo{width:90px;height:90px;background:#fff;border-radius:20px;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:contain}
+.hero{text-align:center;margin-top:20px}
+.card,.footer{background:#fff;border-radius:25px;padding:20px;margin-top:15px}
+.input,.btn{width:100%;padding:16px;border-radius:15px}
+.input{border:2px solid #ddd;text-align:center}
+.btn{border:none;background:#2563eb;color:#fff;font-weight:bold;margin-top:10px}
+.result{display:none}
+.age-card{background:#2563eb;color:#fff;border-radius:20px;padding:20px;text-align:center;margin-top:15px}
+.age-number{font-size:70px;font-weight:bold}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.stat{background:#f3f4f6;padding:15px;border-radius:15px;text-align:center}
+.stat span{font-size:24px;font-weight:bold;color:#2563eb}
+
+.other-services{position:absolute;right:20px;top:20px;width:220px}
+.service-title{background:#2563eb;padding:12px;border-radius:12px;text-align:center;cursor:pointer}
+#jokeBox{
+display:none;
+position:absolute;
+top:60px;
+right:0;
+width:220px;
+background:#fff;
+color:#2563eb;
+padding:12px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+z-index:999;
+}
+
+@media(max-width:768px){
+.other-services{position:static;width:100%;margin-top:15px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="brand">
+<div class="logo"><img src="ainex-logo.png"></div>
+<div><h1>AINEX</h1><p>DIGITAL SERVICES</p></div>
+</div>
+
+<div class="other-services">
+<div class="service-title" onclick="showJoke()">OTHER SERVICES</div>
+<div id="jokeBox"></div>
+</div>
+
+<div class="hero">
+<h2>🎂 AGE CALCULATOR</h2>
+<p>DD/MM/YYYY FORMAT</p>
+</div>
+</div>
+
+<div class="card">
+<label>SELECT DATE OF BIRTH (DD/MM/YYYY)</label><br><br>
+<input type="text" id="dob" class="input" placeholder="DD/MM/YYYY" maxlength="10">
+<button class="btn" onclick="calculateAge()">CALCULATE AGE</button>
+
+<div id="result" class="result">
+<div class="age-card">
+<h3>YOUR CURRENT AGE</h3>
+<div class="age-number" id="years">0</div>
+<p>YEARS OLD</p>
+</div>
+
+<div class="stats">
+<div class="stat"><h4>MONTHS</h4><span id="months">0</span></div>
+<div class="stat"><h4>DAYS</h4><span id="days">0</span></div>
+<div class="stat"><h4>TOTAL DAYS</h4><span id="totalDays">0</span></div>
+<div class="stat"><h4>TOTAL WEEKS</h4><span id="weeks">0</span></div>
+<div class="stat"><h4>TOTAL HOURS</h4><span id="hours">0</span></div>
+<div class="stat"><h4>CURRENT TIME</h4><span id="currentTime">00:00:00</span></div>
+</div>
+</div>
+</div>
+
+<div class="footer">
+<h3>AINEX DIGITAL SERVICES</h3>
+<p>Founder & CEO : Aaditya Pandey</p>
+</div>
+</div>
+
+<script>
+function calculateAge(){
+let dob=document.getElementById("dob").value.trim();
+let p=dob.split("/");
+if(p.length!==3){alert("ENTER DD/MM/YYYY");return;}
+let birth=new Date(p[2],p[1]-1,p[0]);
+let today=new Date();
+let years=today.getFullYear()-birth.getFullYear();
+let months=today.getMonth()-birth.getMonth();
+let days=today.getDate()-birth.getDate();
+if(days<0){months--;days+=new Date(today.getFullYear(),today.getMonth(),0).getDate();}
+if(months<0){years--;months+=12;}
+let totalDays=Math.floor((today-birth)/86400000);
+document.getElementById("years").innerHTML=years;
+document.getElementById("months").innerHTML=months;
+document.getElementById("days").innerHTML=days;
+document.getElementById("totalDays").innerHTML=totalDays.toLocaleString();
+document.getElementById("weeks").innerHTML=Math.floor(totalDays/7).toLocaleString();
+document.getElementById("hours").innerHTML=Math.floor((today-birth)/3600000).toLocaleString();
+document.getElementById("result").style.display="block";
+}
+
+function showJoke(){
+let jokes=[
+"Server so raha hai, thodi der me jagayenge!",
+"AINEX me sab milta hai, bas free pizza nahi!",
+"Website bhi banegi aur mood bhi banega!",
+"AINEX - One Platform Multiple Solutions!"
+];
+let box=document.getElementById("jokeBox");
+box.innerHTML=jokes[Math.floor(Math.random()*j.length)];
+box.style.display="block";
+setTimeout(()=>{box.style.display="none";},3000);
+}
+
+setInterval(()=>{
+document.getElementById("currentTime").innerHTML=new Date().toLocaleTimeString();
+},1000);
+
+document.getElementById("dob").addEventListener("input",function(e){
+let v=e.target.value.replace(/\D/g,'');
+if(v.length>2&&v.length<=4)v=v.slice(0,2)+"/"+v.slice(2);
+else if(v.length>4)v=v.slice(0,2)+"/"+v.slice(2,4)+"/"+v.slice(4,8);
+e.target.value=v;
+});
+</script>
+</body>
+</html>
